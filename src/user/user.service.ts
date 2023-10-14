@@ -1,9 +1,8 @@
-import {HttpException, HttpStatus, Injectable} from "@nestjs/common";
-import * as bcrypt from "bcrypt";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { User } from "./entities/user.entity";
-import {PrismaService} from "../database/prisma.service";
-import { Prisma } from "@prisma/client/extension";
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
+import { User } from './entities/user.entity';
+import { PrismaService } from '../database/prisma.service';
 
 @Injectable()
 export class UserService {
@@ -16,7 +15,10 @@ export class UserService {
     };
 
     if (await this.findByUsername(createUserDto.username)) {
-        throw new HttpException('messages.error.usernameAlreadyExists', HttpStatus.CONFLICT);
+      throw new HttpException(
+        'messages.error.usernameAlreadyExists',
+        HttpStatus.CONFLICT,
+      );
     }
 
     const createdUser = await this.prisma.user.create({ data });

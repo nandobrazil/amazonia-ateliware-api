@@ -11,10 +11,30 @@ generator client {
 }
 
 model User {
-    id Int @id @default(autoincrement())
-
-    username    String @unique
+    id       Int    @id @default(autoincrement())
+    username String @unique
     password String
+    name     String
 
-    name String
+    routes Route[]
+}
+
+model Route {
+    id                 Int         @id @default(autoincrement())
+    origin             String
+    package_collection String
+    destination        String
+    DateCreated        DateTime
+    TimePercourse      Int
+    userId             Int
+    user               User        @relation(fields: [userId], references: [id])
+    routePaths         RoutePath[]
+}
+
+model RoutePath {
+    id          Int      @id @default(autoincrement())
+    Coordinate  String
+    DateCreated DateTime
+    route       Route    @relation(fields: [routeId], references: [id])
+    routeId     Int
 }
