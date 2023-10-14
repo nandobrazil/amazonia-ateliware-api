@@ -2,19 +2,40 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-    provider = "sqlite"
-    url      = env("DATABASE_URL")
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 generator client {
-    provider = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 model User {
-    id Int @id @default(autoincrement())
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  name     String
 
-    username    String @unique
-    password String
+  routes Route[]
+}
 
-    name String
+model Route {
+  id                 Int         @id @default(autoincrement())
+  origin             String
+  destination        String
+  package_collection String
+  DateCreated        DateTime
+  TimePercourse      Int
+  userId             Int
+  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  routePaths         RoutePath[]
+}
+
+model RoutePath {
+  id          Int      @id @default(autoincrement())
+  Coordinate  String
+  DateCreated DateTime
+  routeId     Int
+  route       Route    @relation(fields: [routeId], references: [id])
 }
