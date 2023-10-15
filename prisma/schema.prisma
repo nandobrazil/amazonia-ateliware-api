@@ -24,9 +24,9 @@ model Route {
   id                 Int         @id @default(autoincrement())
   origin             String
   destination        String
-  package_collection String
-  DateCreated        DateTime
-  TimePercourse      Int
+  packageCollection String
+  dateCreated        DateTime
+  timeRoute          Int
   userId             Int
   user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   routePaths         RoutePath[]
@@ -34,8 +34,8 @@ model Route {
 
 model RoutePath {
   id          Int      @id @default(autoincrement())
-  Coordinate  String
-  DateCreated DateTime
+  coordinate  String
+  dateCreated DateTime
   routeId     Int
   route       Route    @relation(fields: [routeId], references: [id])
 }

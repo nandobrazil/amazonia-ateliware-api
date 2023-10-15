@@ -1,7 +1,6 @@
+import { IEntity } from "../../shared/interfaces/IEntity";
 
-export class RoutePathEntity {
-  id: number;
-  Coordinate: string;
-  DateCreated: Date;
-  routeId: number;
+export class RoutePathEntity extends IEntity {
+  coordinate: string;
+  dateCreated: Date;
 }

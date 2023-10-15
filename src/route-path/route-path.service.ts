@@ -21,7 +21,7 @@ export class RoutePathService {
   ): Promise<CreateRoutePathDto> {
     const data = {
       ...createRoutePathDto,
-      DateCreated: new Date(),
+      dateCreated: new Date(),
         route: {
         connect: {
           id: routeId,

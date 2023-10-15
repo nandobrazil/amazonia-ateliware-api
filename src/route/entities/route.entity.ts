@@ -1,12 +1,9 @@
-import { RoutePathEntity } from '../../route-path/entities/route-path.entity';
-import { UserEntity } from '../../user/entities/user.entity';
+import { IEntity } from "../../shared/interfaces/IEntity";
 
-export class RouteEntity {
-  id?: number;
+export class RouteEntity extends IEntity {
   origin: string;
-  package_collection: string;
+  packageCollection: string;
   destination: string;
-  DateCreated: Date;
-  TimePercourse: number;
+  timeRoute: number;
   userId: number;
 }

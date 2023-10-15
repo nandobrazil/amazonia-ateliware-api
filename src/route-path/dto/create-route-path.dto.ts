@@ -1,3 +1,3 @@
 export class CreateRoutePathDto {
-  Coordinate: string;
+  coordinate: string;
 }

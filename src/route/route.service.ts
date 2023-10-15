@@ -6,7 +6,7 @@ import { DijkstraService } from '../shared/services/dijkstra.service';
 import { MockioApiService } from '../shared/services/mockio-api.service';
 import { AuthRequest } from '../auth/models/AuthRequest';
 import { RoutePathService } from '../route-path/route-path.service';
-import { CreateRoutePathDto } from '../route-path/dto/create-route-path.dto';
+import { ListRouteDto } from './dto/list-route.dto';
 
 @Injectable()
 export class RouteService {
@@ -17,38 +17,39 @@ export class RouteService {
     private readonly mockioApi: MockioApiService,
   ) {}
 
-  async create(req: AuthRequest, createRouteDto: CreateRouteDto): Promise<any> {
+  async create(
+    req: AuthRequest,
+    createRouteDto: CreateRouteDto,
+  ): Promise<ListRouteDto> {
     const graph = await this.mockioApi.fetchData();
     const packageRoute = this.dijkstraService.dijkstra(
       graph,
       createRouteDto.origin,
-      createRouteDto.package_collection,
+      createRouteDto.packageCollection,
     );
     const finalRoute = this.dijkstraService.dijkstra(
       graph,
-      createRouteDto.package_collection,
+      createRouteDto.packageCollection,
       createRouteDto.destination,
     );
 
     const data: RouteEntity = {
       ...createRouteDto,
-      DateCreated: new Date(),
-      TimePercourse: packageRoute?.time + finalRoute?.time,
+      dateCreated: new Date(),
+      timeRoute: packageRoute?.time + finalRoute?.time,
       userId: req.user.id,
     };
 
     const createdRoute = await this.prisma.route.create({ data });
     const routePaths = packageRoute.path.map((path) => path);
     routePaths.push(...finalRoute.path.map((path) => path));
-    console.log(routePaths);
-    console.log(createdRoute);
     if (routePaths && routePaths.length > 0) {
       await Promise.all(
         routePaths.map(async (path) => {
           await this.prisma.routePath.create({
             data: {
-              Coordinate: path,
-              DateCreated: new Date(),
+              coordinate: path,
+              dateCreated: new Date(),
               route: {
                 connect: {
                   id: createdRoute.id,
@@ -59,9 +60,47 @@ export class RouteService {
         }),
       );
     }
+    const {
+      id,
+      origin,
+      destination,
+      packageCollection,
+      dateCreated,
+      timeRoute,
+    } = createdRoute;
     return {
-      ...createdRoute,
+      id,
+      origin,
+      destination,
+      timeRoute,
+      packageCollection,
+      dateCreated: this.formatDate(dateCreated),
       routePaths,
     };
+  }
+
+  async findAll(req: AuthRequest): Promise<ListRouteDto[]> {
+    const listRouteEntity = await this.prisma.route.findMany({
+      include: {
+        routePaths: true,
+      },
+      where: { userId: req.user.id },
+    });
+    return listRouteEntity?.map((route) => ({
+      id: route.id,
+      origin: route.origin,
+      destination: route.destination,
+      packageCollection: route.packageCollection,
+      timeRoute: route.timeRoute,
+      dateCreated: this.formatDate(route.dateCreated),
+      routePaths: route.routePaths?.map((path) => path.coordinate),
+    }));
+  }
+
+  formatDate(date: Date): string {
+    const hour = `${date.getHours()}:${date.getMinutes()}`;
+    return `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()} ${hour}`;
   }
 }

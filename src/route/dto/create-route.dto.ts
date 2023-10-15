@@ -10,7 +10,7 @@ export class CreateRouteDto {
   @Matches(/^[A-H][1-8]$/, {
     message: 'messages.error.invalidFormat',
   })
-  package_collection: string;
+  packageCollection: string;
 
   @Matches(/^[A-H][1-8]$/, {
     message: 'messages.error.invalidFormat',
