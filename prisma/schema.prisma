@@ -21,21 +21,23 @@ model User {
 }
 
 model Route {
-  id                 Int         @id @default(autoincrement())
-  origin             String
-  destination        String
+  id                Int         @id @default(autoincrement())
+  origin            String
+  destination       String
   packageCollection String
-  dateCreated        DateTime
-  timeRoute          Int
-  userId             Int
-  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  routePaths         RoutePath[]
+  dateCreated       DateTime
+  timeRoute         Int
+  userId            Int
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  routePaths        RoutePath[]
 }
 
 model RoutePath {
   id          Int      @id @default(autoincrement())
   coordinate  String
   dateCreated DateTime
+  origin      Boolean
+  order       Int
   routeId     Int
   route       Route    @relation(fields: [routeId], references: [id])
 }

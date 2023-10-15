@@ -5,8 +5,8 @@ import {
   BadRequestException,
   Request,
   HttpCode,
-  Get,
-} from '@nestjs/common';
+  Get, UnauthorizedException
+} from "@nestjs/common";
 import { RouteService } from './route.service';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { validate } from 'class-validator';
@@ -24,7 +24,10 @@ export class RouteController {
     @Request() req: AuthRequest,
     @Body() createRouteDto: CreateRouteDto,
   ): Promise<IHttpResult<ListRouteDto>> {
-    await validate(createRouteDto);
+    if (!req?.user?.id) {
+      console.log('entrei');
+      throw new UnauthorizedException('userNotAuthenticated');
+    }
     const routeDto = await this.routeService.create(req, createRouteDto);
     return new ResponseResult<ListRouteDto>(
       HttpStatusCode.Created,
