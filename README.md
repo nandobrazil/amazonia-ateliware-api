@@ -12,20 +12,14 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
-$ npm run start
+# First: migrate dev database with sqlite (mysql is used on prod)
+$ npx prisma migrate dev
 
 # watch mode
 $ npm run start:dev
 
-# production mode
-$ npm run start:prod
-
 # prisma
 $ npx prisma studio
-
-# migrate dev database with sqlite (mysql is used on prod)
-$ npx prisma migrate dev
 ```
 
 ## Test
