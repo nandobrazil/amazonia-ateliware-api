@@ -1,6 +1,7 @@
 ## Description
 
-API Rest build with NestJS.
+Use NODE v18.16.0
+AmazonIA Ateliware - API Rest build with NestJS.
 
 ## Installation
 
