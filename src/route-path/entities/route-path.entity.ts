@@ -5,4 +5,5 @@ export class RoutePathEntity extends IEntity {
   origin: boolean;
   order: number;
   dateCreated: Date;
+  routeId: number;
 }

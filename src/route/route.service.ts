@@ -5,7 +5,6 @@ import { PrismaService } from '../database/prisma.service';
 import { DijkstraService } from '../shared/services/dijkstra.service';
 import { MockioApiService } from '../shared/services/mockio-api.service';
 import { AuthRequest } from '../auth/models/AuthRequest';
-import { RoutePathService } from '../route-path/route-path.service';
 import { ListRouteDto } from './dto/list-route.dto';
 import { CreateRoutePathDto } from '../route-path/dto/create-route-path.dto';
 import { ListRoutePathDto } from '../route-path/dto/list-route-path.dto';
@@ -15,7 +14,6 @@ export class RouteService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly dijkstraService: DijkstraService,
-    private readonly routePathService: RoutePathService,
     private readonly mockioApi: MockioApiService,
   ) {}
 
@@ -34,6 +32,7 @@ export class RouteService {
       createRouteDto.packageCollection,
       createRouteDto.destination,
     );
+
     const data: RouteEntity = {
       ...createRouteDto,
       dateCreated: new Date(),
@@ -56,6 +55,7 @@ export class RouteService {
         order: index + 1,
       }),
     );
+
     const routePaths = [...originPaths, ...destinationPaths];
     if (routePaths && routePaths.length > 0) {
       routePaths.map(async ({ coordinate, origin, order }) => {
@@ -138,8 +138,8 @@ export class RouteService {
 
   formatDate(date: Date): string {
     const hour = `${date.getHours()}:${date.getMinutes()}`;
-    return `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()} ${hour}`;
+    return (
+      `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} ` + hour
+    );
   }
 }
