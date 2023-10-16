@@ -26,7 +26,7 @@ model Route {
   destination       String
   packageCollection String
   dateCreated       DateTime
-  timeRoute         Int
+  timeRoute         Decimal
   userId            Int
   user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   routePaths        RoutePath[]

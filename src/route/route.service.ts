@@ -34,7 +34,6 @@ export class RouteService {
       createRouteDto.packageCollection,
       createRouteDto.destination,
     );
-
     const data: RouteEntity = {
       ...createRouteDto,
       dateCreated: new Date(),
@@ -95,7 +94,7 @@ export class RouteService {
       id,
       origin,
       destination,
-      timeRoute,
+      timeRoute: parseFloat(timeRoute.toFixed(2)),
       packageCollection,
       dateCreated: this.formatDate(dateCreated),
       routePaths: routePathDto,
@@ -130,7 +129,7 @@ export class RouteService {
         origin: route.origin,
         destination: route.destination,
         packageCollection: route.packageCollection,
-        timeRoute: route.timeRoute,
+        timeRoute: parseFloat(route.timeRoute.toFixed(2)),
         dateCreated: this.formatDate(route.dateCreated),
         routePaths: routePathDto,
       };

@@ -1,4 +1,4 @@
-import { IEntity } from "../../shared/interfaces/IEntity";
+import { IEntity } from '../../shared/interfaces/IEntity';
 
 export class RouteEntity extends IEntity {
   origin: string;
