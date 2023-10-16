@@ -14,18 +14,27 @@ import { AuthRequest } from '../auth/models/AuthRequest';
 import { ListRouteDto } from './dto/list-route.dto';
 import { ResponseResult } from '../shared/classes/ResponseResult';
 import { HttpStatusCode } from 'axios';
+import { ApiOperation, ApiTags } from "@nestjs/swagger";
 
 @Controller('route')
+@ApiTags('Route')
 export class RouteController {
   constructor(private readonly routeService: RouteService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Create new Route',
+    operationId: 'create',
+    description: '' +
+      'origin\n' +
+      'packageCollection\n' +
+      'destination',
+  })
   async create(
     @Request() req: AuthRequest,
     @Body() createRouteDto: CreateRouteDto,
   ): Promise<IHttpResult<ListRouteDto>> {
     if (!req?.user?.id) {
-      console.log('entrei');
       throw new UnauthorizedException('userNotAuthenticated');
     }
     const routeDto = await this.routeService.create(req, createRouteDto);
@@ -37,6 +46,11 @@ export class RouteController {
   }
 
   @Get()
+  @ApiOperation({
+    summary: 'FindAll Routes',
+    operationId: 'findMany',
+    description: '',
+  })
   async findAll(@Request() req: AuthRequest): Promise<IHttpResult<ListRouteDto[]>> {
     const listRouteDto = await this.routeService.findAll(req);
     return new ResponseResult<ListRouteDto[]>(
